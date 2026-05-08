@@ -16,10 +16,19 @@ if (missingEnvVars.length > 0) {
 }
 
 const app = express();
+const allowedOrigins = [process.env.FRONTEND_URL, process.env.VERCEL_URL, 'http://localhost:5173'].filter(Boolean);
 
 // Middleware
-app.use(cors());
-app.use(express.json());
+app.use(cors({
+  origin(origin, callback) {
+    if (!origin || allowedOrigins.length === 0 || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    return callback(new Error('Not allowed by CORS'));
+  },
+}));
+app.use(express.json({ limit: '1mb' }));
 
 // Routes (to be added)
 app.get('/', (req, res) => {

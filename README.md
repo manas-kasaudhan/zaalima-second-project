@@ -44,6 +44,7 @@ Backend:
   - `MONGODB_URI`
   - `OPENAI_API_KEY`
   - `JWT_SECRET`
+  - `FRONTEND_URL` for the deployed frontend origin
 
 See [server/README.md](C:/Users/MOYIN/Downloads/zaalima-second-project-main/zaalima-second-project-main/server/README.md) for backend setup details.
 
@@ -75,4 +76,4 @@ npm run build
 - Do not commit `.env` or `server/.env`
 - Use `.env.example` and `server/.env.example` as safe templates
 - Frontend hosting can use `VITE_API_BASE_URL` pointing to your deployed backend
-- Backend hosting should set `MONGODB_URI`, `OPENAI_API_KEY`, and `JWT_SECRET` in the host dashboard
+- Backend hosting should set `MONGODB_URI`, `OPENAI_API_KEY`, `JWT_SECRET`, and `FRONTEND_URL` in the host dashboard

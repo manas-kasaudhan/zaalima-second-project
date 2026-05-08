@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import './Navbar.css'
+import { clearSession, getStoredUser } from '../utils/session'
 
 function Navbar() {
   const location = useLocation()
+  const navigate = useNavigate()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [theme, setTheme] = useState('light')
+  const [user, setUser] = useState(null)
 
   useEffect(() => {
     // Check local storage or system preference on mount
@@ -19,6 +22,19 @@ function Navbar() {
     }
   }, [])
 
+  useEffect(() => {
+    const syncUser = () => setUser(getStoredUser())
+
+    syncUser()
+    window.addEventListener('extensio-auth-changed', syncUser)
+    window.addEventListener('storage', syncUser)
+
+    return () => {
+      window.removeEventListener('extensio-auth-changed', syncUser)
+      window.removeEventListener('storage', syncUser)
+    }
+  }, [])
+
   const toggleTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light'
     setTheme(newTheme)
@@ -29,10 +45,16 @@ function Navbar() {
   const navLinks = [
     { to: '/dashboard', label: 'Dashboard' },
     { to: '/pricing', label: 'Pricing' },
-    { to: '#', label: 'Docs' },
+    { to: '/generator', label: 'Generator' },
   ]
 
   const isActive = (path) => location.pathname === path
+
+  const handleLogout = () => {
+    clearSession()
+    setMobileOpen(false)
+    navigate('/login')
+  }
 
   return (
     <header className="navbar">
@@ -54,12 +76,23 @@ function Navbar() {
 
         <div className="navbar-actions">
           <div className="navbar-right">
-            <Link to="/login" className={`navbar-link ${isActive('/login') ? 'active' : ''}`}>
-              Login
-            </Link>
-            <Link to="/signup" className="btn btn-primary btn-sm">
-              Sign up
-            </Link>
+            {user ? (
+              <>
+                <span className="navbar-user">Hi, {user.username}</span>
+                <button type="button" className="btn btn-ghost btn-sm" onClick={handleLogout}>
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link to="/login" className={`navbar-link ${isActive('/login') ? 'active' : ''}`}>
+                  Login
+                </Link>
+                <Link to="/signup" className="btn btn-primary btn-sm">
+                  Sign up
+                </Link>
+              </>
+            )}
           </div>
 
           <div className="navbar-controls">
@@ -103,8 +136,17 @@ function Navbar() {
             </Link>
           ))}
           <div className="navbar-mobile-actions">
-            <Link to="/login" className="navbar-mobile-link" onClick={() => setMobileOpen(false)}>Login</Link>
-            <Link to="/signup" className="btn btn-primary btn-full" onClick={() => setMobileOpen(false)}>Sign up</Link>
+            {user ? (
+              <>
+                <span className="navbar-mobile-user">Hi, {user.username}</span>
+                <button type="button" className="btn btn-ghost btn-full" onClick={handleLogout}>Logout</button>
+              </>
+            ) : (
+              <>
+                <Link to="/login" className="navbar-mobile-link" onClick={() => setMobileOpen(false)}>Login</Link>
+                <Link to="/signup" className="btn btn-primary btn-full" onClick={() => setMobileOpen(false)}>Sign up</Link>
+              </>
+            )}
           </div>
         </div>
       )}

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import './SignupPage.css'
 import { apiRequest } from '../utils/api'
+import { saveSession } from '../utils/session'
 
 function SignupPage() {
   const navigate = useNavigate()
@@ -22,8 +23,7 @@ function SignupPage() {
         body: JSON.stringify({ username, email, password }),
       })
 
-      localStorage.setItem('extensio_token', data.token)
-      localStorage.setItem('extensio_user', JSON.stringify(data.user))
+      saveSession(data)
       navigate('/dashboard')
     } catch (err) {
       setError(err.message)

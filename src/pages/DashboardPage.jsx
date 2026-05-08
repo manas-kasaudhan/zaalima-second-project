@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import './DashboardPage.css'
 import { apiRequest } from '../utils/api'
+import { clearSession, getStoredToken, getStoredUser } from '../utils/session'
 
 function DashboardPage() {
   const navigate = useNavigate()
@@ -11,8 +12,8 @@ function DashboardPage() {
   const [username, setUsername] = useState('')
 
   useEffect(() => {
-    const token = localStorage.getItem('extensio_token')
-    const storedUser = localStorage.getItem('extensio_user')
+    const token = getStoredToken()
+    const storedUser = getStoredUser()
 
     if (!token) {
       navigate('/login')
@@ -20,12 +21,7 @@ function DashboardPage() {
     }
 
     if (storedUser) {
-      try {
-        const user = JSON.parse(storedUser)
-        setUsername(user.username || '')
-      } catch {
-        localStorage.removeItem('extensio_user')
-      }
+      setUsername(storedUser.username || '')
     }
 
     async function loadProjects() {
@@ -41,8 +37,7 @@ function DashboardPage() {
         setError(err.message)
 
         if (err.message === 'Please authenticate.') {
-          localStorage.removeItem('extensio_token')
-          localStorage.removeItem('extensio_user')
+          clearSession()
           navigate('/login')
         }
       } finally {

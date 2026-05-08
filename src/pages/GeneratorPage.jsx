@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './GeneratorPage.css'
 import { apiRequest, API_BASE_URL } from '../utils/api'
+import { clearSession, getStoredToken } from '../utils/session'
 
 const EMPTY_FILES = {
   'manifest.json': `{
@@ -33,7 +34,7 @@ function GeneratorPage() {
   const [copied, setCopied] = useState(false)
 
   useEffect(() => {
-    const token = localStorage.getItem('extensio_token')
+    const token = getStoredToken()
 
     if (!token) {
       navigate('/login')
@@ -49,7 +50,7 @@ function GeneratorPage() {
   }, [activeTab, fileNames])
 
   const handleGenerate = async () => {
-    const token = localStorage.getItem('extensio_token')
+    const token = getStoredToken()
 
     if (!token) {
       navigate('/login')
@@ -77,6 +78,12 @@ function GeneratorPage() {
       setProject(data.project)
       setActiveTab(Object.keys(data.files)[0] || 'manifest.json')
     } catch (err) {
+      if (err.message === 'Please authenticate.') {
+        clearSession()
+        navigate('/login')
+        return
+      }
+
       setError(err.message)
     } finally {
       setIsSubmitting(false)

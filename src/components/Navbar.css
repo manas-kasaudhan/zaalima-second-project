@@ -74,6 +74,12 @@
   gap: var(--sp-4);
 }
 
+.navbar-user {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
 .navbar-controls {
   display: flex;
   align-items: center;
@@ -135,6 +141,12 @@
   gap: var(--sp-3);
   padding-top: var(--sp-4);
   border-top: 1px solid var(--border-base);
+}
+
+.navbar-mobile-user {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
 }
 
 @media (max-width: 768px) {

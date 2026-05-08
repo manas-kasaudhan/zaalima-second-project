@@ -4,6 +4,7 @@ const archiver = require('archiver');
 const { v4: uuidv4 } = require('uuid');
 
 const TMP_DIR = path.join(__dirname, '../tmp');
+const ZIP_TTL_MS = 1000 * 60 * 60;
 
 // Ensure tmp directory exists
 fs.ensureDirSync(TMP_DIR);
@@ -25,6 +26,11 @@ async function createExtensionZip(filesJson) {
     // 2. Write files
     for (const [filename, content] of Object.entries(filesJson)) {
       const filePath = path.join(projectPath, filename);
+      const resolvedFilePath = path.resolve(filePath);
+      if (!resolvedFilePath.startsWith(path.resolve(projectPath))) {
+        throw new Error(`Unsafe filename detected: ${filename}`);
+      }
+
       // Ensure subdirectories exist if filename contains them (e.g., "icons/icon128.png")
       await fs.ensureDir(path.dirname(filePath));
       await fs.writeFile(filePath, content);
@@ -38,6 +44,9 @@ async function createExtensionZip(filesJson) {
       output.on('close', () => {
         // Cleanup: remove the project directory, keep the zip
         fs.remove(projectPath).catch(console.error);
+        setTimeout(() => {
+          fs.remove(zipFilePath).catch(() => {});
+        }, ZIP_TTL_MS);
         resolve(`${projectId}.zip`);
       });
 

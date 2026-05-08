@@ -1,6 +1,8 @@
 const Project = require('../models/Project');
 const { generateExtensionCode } = require('../utils/llmPrompt');
 const { createExtensionZip } = require('../utils/fileManager');
+const { sanitizeGeneratedCode } = require('../utils/security');
+const { validateProjectInput } = require('../utils/validation');
 
 const getUserProjects = async (req, res) => {
   try {
@@ -23,14 +25,20 @@ const getProject = async (req, res) => {
 
 const updateProject = async (req, res) => {
   try {
-    const { prompt, title } = req.body;
+    const validation = validateProjectInput(req.body, { requirePrompt: false });
+    if (validation.error) {
+      return res.status(400).json({ error: validation.error });
+    }
+
+    const { prompt, title } = validation.value;
     const project = await Project.findOne({ _id: req.params.id, userId: req.user.id });
     
     if (!project) return res.status(404).json({ error: 'Project not found' });
 
     // If a new prompt is provided, regenerate the code
     if (prompt && prompt !== project.prompt) {
-      const files = await generateExtensionCode(`Update this extension: ${prompt}. Previous context: ${project.prompt}`);
+      let files = await generateExtensionCode(`Update this extension: ${prompt}. Previous context: ${project.prompt}`);
+      files = sanitizeGeneratedCode(files);
       const zipFileName = await createExtensionZip(files);
       project.files = files;
       project.zipUrl = `/downloads/${zipFileName}`;
