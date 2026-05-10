@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import './GeneratorPage.css'
 import { apiRequest, API_BASE_URL } from '../utils/api'
 import { clearSession, getStoredToken } from '../utils/session'
@@ -21,9 +21,14 @@ const tabIcon = (filename) => {
   return 'draft'
 }
 
+const DEFAULT_PROMPT = 'Build a chrome extension that highlights all price tags on any e-commerce website and converts them to Bitcoin values based on the current market rate.'
+
 function GeneratorPage() {
   const navigate = useNavigate()
-  const [prompt, setPrompt] = useState('Build a Chrome extension that blocks all images on a website and replaces them with a red square.')
+  const location = useLocation()
+  const incomingPrompt = location.state?.prompt || ''
+
+  const [prompt, setPrompt] = useState(incomingPrompt || 'Build a Chrome extension that blocks all images on a website and replaces them with a red square.')
   const [title, setTitle] = useState('Image Blocker Extension')
   const [files, setFiles] = useState(EMPTY_FILES)
   const [activeTab, setActiveTab] = useState('manifest.json')

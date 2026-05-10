@@ -285,6 +285,19 @@
   color: var(--text-primary);
 }
 
+/* Dark Mode Overrides */
+[data-theme='dark'] .gen-code-body {
+  background: #0F172A;
+}
+
+[data-theme='dark'] .gen-code-content {
+  color: #94A3B8;
+}
+
+[data-theme='dark'] .gen-tab:hover {
+  background: rgba(255,255,255,0.03);
+}
+
 /* Responsive */
 @media (max-width: 900px) {
   .generator {

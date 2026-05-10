@@ -8,6 +8,7 @@ import SignupPage from './pages/SignupPage'
 import DashboardPage from './pages/DashboardPage'
 import GeneratorPage from './pages/GeneratorPage'
 import PricingPage from './pages/PricingPage'
+import DocsPage from './pages/DocsPage'
 import PageTransition from './components/PageTransition'
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
             <Route path="/dashboard" element={<PageTransition><DashboardPage /></PageTransition>} />
             <Route path="/generator" element={<PageTransition><GeneratorPage /></PageTransition>} />
             <Route path="/pricing" element={<PageTransition><PricingPage /></PageTransition>} />
+            <Route path="/docs" element={<PageTransition><DocsPage /></PageTransition>} />
           </Routes>
         </AnimatePresence>
       </main>

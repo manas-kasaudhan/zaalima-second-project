@@ -15,7 +15,11 @@ function LandingPage() {
   const navigate = useNavigate()
 
   const handleGenerate = () => {
-    navigate('/generator')
+    if (!prompt.trim()) {
+      document.getElementById('prompt-input')?.focus()
+      return
+    }
+    navigate('/generator', { state: { prompt: prompt.trim() } })
   }
 
   const handleSuggestion = (label) => {
@@ -55,7 +59,9 @@ function LandingPage() {
             <div className="prompt-footer">
               <div className="prompt-status">
                 <span className="material-symbols-outlined prompt-icon">terminal</span>
-                <span className="font-code prompt-status-text">READY FOR PROMPT...</span>
+                <span className="font-code prompt-status-text">
+                  {prompt.trim().length > 0 ? `${prompt.trim().length} CHARS — READY TO GENERATE` : 'READY FOR PROMPT...'}
+                </span>
               </div>
               <button className="btn btn-primary" onClick={handleGenerate} id="generate-btn">
                 <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>bolt</span>
