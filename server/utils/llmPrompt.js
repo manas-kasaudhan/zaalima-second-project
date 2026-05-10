@@ -36,7 +36,7 @@ Chain of Thought:
 async function generateExtensionCode(userPrompt) {
   try {
     const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo-0125", // Or gpt-4-turbo-preview
+      model: "gpt-4o-mini",
       messages: [
         { role: "system", content: SYSTEM_PROMPT },
         { role: "user", content: userPrompt }
@@ -47,8 +47,14 @@ async function generateExtensionCode(userPrompt) {
     const content = response.choices[0].message.content;
     return JSON.parse(content);
   } catch (error) {
-    console.error("Error generating code:", error);
-    throw new Error("Failed to generate extension code");
+    const providerMessage =
+      error?.response?.data?.error?.message ||
+      error?.error?.message ||
+      error?.message ||
+      'Unknown OpenAI error';
+
+    console.error('Error generating code:', providerMessage);
+    throw new Error(`Failed to generate extension code: ${providerMessage}`);
   }
 }
 
