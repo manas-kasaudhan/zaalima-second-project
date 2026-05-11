@@ -43,9 +43,25 @@ async function generateExtensionCode(userPrompt) {
         { role: 'user', content: userPrompt }
       ],
       store: false,
+      text: {
+        format: {
+          type: 'json_object',
+        },
+      },
     });
 
-    const content = response.output_text;
+    const content =
+      response.output_text ||
+      response.output
+        ?.filter((item) => item.type === 'message')
+        .flatMap((item) => item.content || [])
+        .find((item) => item.type === 'output_text')
+        ?.text;
+
+    if (!content) {
+      throw new Error('The AI provider returned an empty response.');
+    }
+
     return JSON.parse(content);
   } catch (error) {
     const providerMessage =
