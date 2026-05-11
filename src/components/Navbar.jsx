@@ -46,6 +46,7 @@ function Navbar() {
     { to: '/dashboard', label: 'Dashboard' },
     { to: '/pricing', label: 'Pricing' },
     { to: '/generator', label: 'Generator' },
+    { to: '/docs', label: 'Docs' },
   ]
 
   const isActive = (path) => location.pathname === path

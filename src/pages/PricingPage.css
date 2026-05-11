@@ -272,3 +272,19 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Dark Mode Overrides */
+[data-theme='dark'] .pricing-sales-btn {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  border-color: var(--border-base);
+}
+
+[data-theme='dark'] .pricing-sales-btn:hover {
+  background: var(--bg-inset);
+  border-color: var(--border-hover);
+}
+
+[data-theme='dark'] .pricing-info-small-icon {
+  background: var(--bg-inset);
+}

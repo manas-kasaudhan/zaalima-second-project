@@ -7,7 +7,7 @@ function Footer() {
       <div className="footer-inner">
         <div className="footer-left">
           <Link to="/" className="footer-logo">Extensio.ai</Link>
-          <span className="footer-copy">© 2024 Extensio.ai</span>
+          <span className="footer-copy">© 2026 Extensio.ai</span>
         </div>
         <div className="footer-links">
           <a href="#" className="footer-link">Terms</a>
