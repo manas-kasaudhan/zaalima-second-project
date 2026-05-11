@@ -11,7 +11,7 @@ npm install
 Copy `server/.env.example` to `server/.env` and fill in:
 
 - `MONGODB_URI`
-- `OPENAI_API_KEY`
+- `XAI_API_KEY`
 - `JWT_SECRET`
 - `FRONTEND_URL` for your deployed frontend origin
 

@@ -42,7 +42,7 @@ Backend:
 - Copy `server/.env.example` to `server/.env`
 - Set:
   - `MONGODB_URI`
-  - `OPENAI_API_KEY`
+  - `XAI_API_KEY`
   - `JWT_SECRET`
   - `FRONTEND_URL` for the deployed frontend origin
 
@@ -76,4 +76,4 @@ npm run build
 - Do not commit `.env` or `server/.env`
 - Use `.env.example` and `server/.env.example` as safe templates
 - Frontend hosting can use `VITE_API_BASE_URL` pointing to your deployed backend
-- Backend hosting should set `MONGODB_URI`, `OPENAI_API_KEY`, `JWT_SECRET`, and `FRONTEND_URL` in the host dashboard
+- Backend hosting should set `MONGODB_URI`, `XAI_API_KEY`, `JWT_SECRET`, and `FRONTEND_URL` in the host dashboard

@@ -7,7 +7,7 @@ const path = require('path');
 dotenv.config({ path: path.join(__dirname, '.env') });
 
 // Environment Validation
-const requiredEnvVars = ['MONGODB_URI', 'OPENAI_API_KEY', 'JWT_SECRET'];
+const requiredEnvVars = ['MONGODB_URI', 'XAI_API_KEY', 'JWT_SECRET'];
 const missingEnvVars = requiredEnvVars.filter((varName) => !process.env[varName]);
 if (missingEnvVars.length > 0) {
   console.error('FATAL ERROR: Missing required environment variables:', missingEnvVars.join(', '));
