@@ -36,27 +36,16 @@ Chain of Thought:
 
 async function generateExtensionCode(userPrompt) {
   try {
-    const response = await openai.responses.create({
+    const response = await openai.chat.completions.create({
       model: 'grok-4.3',
-      input: [
+      messages: [
         { role: 'system', content: SYSTEM_PROMPT },
         { role: 'user', content: userPrompt }
       ],
-      store: false,
-      text: {
-        format: {
-          type: 'json_object',
-        },
-      },
+      response_format: { type: 'json_object' },
     });
 
-    const content =
-      response.output_text ||
-      response.output
-        ?.filter((item) => item.type === 'message')
-        .flatMap((item) => item.content || [])
-        .find((item) => item.type === 'output_text')
-        ?.text;
+    const content = response.choices?.[0]?.message?.content;
 
     if (!content) {
       throw new Error('The AI provider returned an empty response.');
