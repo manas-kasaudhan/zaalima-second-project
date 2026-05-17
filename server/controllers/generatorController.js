@@ -22,12 +22,11 @@ const generate = async (req, res) => {
     try {
       files = await generateExtensionCode(prompt);
     } catch (error) {
-      if (error.code !== 'AI_PROVIDER_UNAVAILABLE') {
-        throw error;
-      }
-
+      console.warn('Falling back to demo extension mode:', error.message);
       usedDemoMode = true;
-      message = 'Demo extension generated because the AI provider is temporarily unavailable.';
+      message = error.code === 'AI_PROVIDER_UNAVAILABLE'
+        ? 'Demo extension generated because the AI provider is temporarily unavailable.'
+        : 'Demo extension generated because live AI generation is currently unavailable.';
       files = generateDemoExtensionCode(prompt, title);
     }
     
